@@ -1,3 +1,4 @@
+#Решение с дескрипторами:
 class CheckWieght:
     """Дескриптор для отображения и изменения веса предметов"""
 
@@ -61,10 +62,38 @@ class Bag:
     def get_total_weight(self):
         """Получаем суммарный вес предметов в рюкзаке"""
         total_weight = 0
-        for i in self.things():
+        for i in self.__things:
             total_weight += i.weight
         return total_weight
 
+#Решение без дескрипторов:
+# class Bag:
+#     def __init__(self, max_weight):
+#         self.max_weight = max_weight
+#         self.__current_weight = 0
+#         self.__things = list()
+#
+#     @property
+#     def things(self):
+#         return self.__things
+#
+#     def add_thing(self, thing):
+#         if self.max_weight - self.__current_weight - thing.weight >= 0:
+#             self.__things.append(thing)
+#             self.__current_weight += thing.weight
+#
+#     def remove_thing(self, indx):
+#         thing = self.__things.pop(indx)
+#         self.__current_weight -= thing.weight
+#
+#     def get_total_weight(self):
+#         return self.__current_weight
+#
+#
+# class Thing:
+#     def __init__(self, name, weight):
+#         self.name = name
+#         self.weight = weight
 
 bag = Bag(200)
 item1 = Thing('sword', 80)
