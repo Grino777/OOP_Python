@@ -29,12 +29,17 @@ class Product:
     def __setattr__(self, key, value):
         """Проверка входящих типов данных"""
         if type(value) in self.check_dict[key]:
+            if key in ('price', 'weight'):
+                if value >= 0:
+                    object.__setattr__(self, key, value)
+                else:
+                    raise TypeError("Неверный тип присваиваемых данных.")
             object.__setattr__(self, key, value)
         else:
             raise TypeError("Неверный тип присваиваемых данных.")
 
-    # def __repr__(self):
-    #     return f'{self.__dict__}'
+    def __repr__(self):
+        return f'{self.__dict__}'
 
 
 class Shop:
