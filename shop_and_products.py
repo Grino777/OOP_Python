@@ -44,6 +44,7 @@ class Product:
 
 class Shop:
     """Класс для создания экз. класс Shop, с возможностью добавления и удаления товаров"""
+
     def __init__(self, name):
         self.name = name
         self.goods = []
@@ -53,6 +54,8 @@ class Shop:
 
     def remove_product(self, product):
         self.goods.remove(product)
+
+
 
 
 s = Shop('DNS')
