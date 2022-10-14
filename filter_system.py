@@ -29,7 +29,7 @@ class GeyserClassic:
             - все три фильтра установлены в слотах;
             - все фильтры работают в пределах срока службы (значение (time.time() - date) должно быть в пределах [0; MAX_DATE_FILTER])"""
         for filter in self.filters:
-            if filter and 0 <= filter.date <= float(self.MAX_DATE_FILTER):
+            if filter and 0 <= (time.time() - filter.date) <= float(self.MAX_DATE_FILTER):
                 continue
             else:
                 return False
