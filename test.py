@@ -1,13 +1,5 @@
-'''Необходимо объявить класс-декоратор с именем Handler, который можно было бы применять к функциям следующим образом:
-
-@Handler(methods=('GET', 'POST')) # по умолчанию methods = ('GET',)
-def contact(request):
-    return "Сергей Балакирев"
-    '''
-
 class Handler:
     def __init__(self, methods=('GET',)):
-        '''аргумент methods декоратора Handler содержит список разрешенных запросов для обработки'''
         self.methods = methods
 
     def __call__(self, func):
@@ -20,15 +12,14 @@ class Handler:
                     return self.post(func, request, *args, *kwargs)
             else:
                 return None
+
         return wrapper
 
     def get(self, func, request, *args, **kwargs):
-        '''Метод для get-запросов'''
         response = func(request)
         return f'GET: {response}'
 
     def post(self, func, request, *args, **kwargs):
-        '''Метод для post-запросов'''
         response = func(request)
         return f'POST: {response}'
 
