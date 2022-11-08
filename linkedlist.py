@@ -176,7 +176,7 @@ class LinkedList:
         while c != indx:
             c += 1
             tmp = tmp.next
-        return tmp.data
+        return tmp.lst_math
 
 
 class ObjList:

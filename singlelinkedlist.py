@@ -41,7 +41,7 @@ class Stack:
         objs_data = []
         temp = self.top
         while temp:
-            objs_data.append(temp.data)
+            objs_data.append(temp.lst_math)
             temp = temp.next
         return objs_data
 
