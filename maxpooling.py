@@ -6,24 +6,42 @@ class MaxPooling:
         self.size_v, self.size_h = size
 
     def __call__(self, *args, **kwargs):
-        matrix = args[0] #Сама матрица
-        if self.check_matrix(matrix): #Проверка матрицы на соответствие содержащихся значений
-            for i in range(0, len(matrix), self.step_v): #Берем строки матрицы с шагом по вертикали
-                # print(matrix[i:i+self.step_v])
-                parts = matrix[i:i+self.step_v] #Полчуенные строки матрицы присваиваем в переменную
-                return self.split_parts(parts)
-
-
-    def split_list(self, m_list:list):
+        matrix = args[0]
+        temp = []
         res = []
-        if len(m_list) >= self.step_h:
-            ...
+        if self.check_matrix(matrix):
+            for i in matrix:  # Берем строки матрицы с шагом по вертикали
+                temp.append(self.split_line(i))
+            for i in range(0, len(temp), self.step_v):  # Берем строки матрицы с шагом по вертикали
+                try:
+                    parts = temp[i:i+self.step_v] #Полчуенные строки матрицы присваиваем в переменную
+                    # parts = list(zip(*parts))
+                    # parts = lambda x: x, *temp[i:i+self.step_v] #Полчуенные строки матрицы присваиваем в переменную
+                    res.append(self.get_max(parts))
+                except IndexError:
+                    continue
+            return res
 
-    def split_parts(self, parts:list=[]): #Принимает список с разным количеством подспиков. Например: [[1, 2, 3, 4], [5, 6, 7, 8]]
-        if len(parts) == self.step_h:
-            res = [[] for i in range(len(parts))]
-            for i in parts:
-                self.split_list(i)
+    def get_max(self, line:list):
+        res = [[] for _ in range(len(line))]
+        for i in line:
+            for n, j in enumerate(i):
+               res[n].extend(j)
+        max_digits = []
+        for i in res:
+            try:
+                max_digits.append(max(i))
+            except ValueError:
+                continue
+        return max_digits
+
+    def split_line(self, line:list):
+        start = 0
+        res = []
+        for i in range(self.size_h, len(line)+1, self.size_h):
+            res.append(line[start:i])
+            start = i
+        return res
 
 
     @staticmethod
@@ -45,14 +63,14 @@ mp = MaxPooling(step=(2, 2), size=(2,2))
 #           [4, 12, 9, 1, 76,  6],
 #           [0, 15, 10, 8, 11, 78],]
 #
-# matrix = [[1, 5, 2],
-#           [7, 0, 1],
-#           [4, 10, 3]]
+matrix = [[1, 5, 2],
+          [7, 0, 1],
+          [4, 10, 3]]
 
-matrix = [[1, 2, 3, 4],
-          [5, 6, 7, 8],
-          [9, 8, 7, 6],
-          [5, 4, 3, 2]]
+# matrix = [[1, 2, 3, 4],
+#           [5, 6, 7, 8],
+#           [9, 8, 7, 6],
+#           [5, 4, 3, 2]]
 
 res = mp(matrix)
 
@@ -62,3 +80,30 @@ res = mp(matrix)
 #           [5, 4, 3, 2]])    # [[6, 8], [9, 7]]
 
 print(res)
+
+
+# def __call__(self, *args, **kwargs):
+    #     matrix = args[0] #Сама матрица
+    #     if self.check_matrix(matrix): #Проверка матрицы на соответствие содержащихся значений
+    #         for i in range(0, len(matrix), self.step_v): #Берем строки матрицы с шагом по вертикали
+    #             # print(matrix[i:i+self.step_v])
+    #             parts = matrix[i:i+self.step_v] #Полчуенные строки матрицы присваиваем в переменную
+    #             return self.split_parts(parts)
+    #
+    #
+    # def split_list(self, m_list:list):
+    #     res = []
+    #     if len(m_list) >= self.step_h:
+    #         if len(m_list)//self.step_h == 1:
+    #             line = np.array_split(m_list, self.step_h)
+    #         else:
+    #             line = np.array_split(m_list, len(m_list)//self.step_h)
+    #     [res.append(list(i)) for i in line if len(i) == self.size_h]
+    #     print(res)
+    #
+    # def split_parts(self,
+    #                 parts: list = []):  # Принимает список с разным количеством подспиков. Например: [[1, 2, 3, 4], [5, 6, 7, 8]]
+    #     if len(parts) == self.step_h:
+    #         res = [[] for i in range(len(parts))]
+    #         for i in parts:
+    #             self.split_list(i)
