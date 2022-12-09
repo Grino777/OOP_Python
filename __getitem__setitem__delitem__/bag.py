@@ -84,3 +84,43 @@ except ValueError:
     assert True
 else:
     assert False, "не сгенерировалось исключение ValueError при замене предмета в объекте класса Bag по индексу"
+
+#Лучшее решение:
+# class Thing:
+#     def __init__(self, name, weight):
+#         self.name = name
+#         self.weight = weight
+#
+# class Bag:
+#     def __init__(self, max_weight):
+#         self.max_weight = max_weight
+#         self.__weight = 0
+#         self.__things = []
+#
+#     def __check_weight(self, new_thing, replace_thing=Thing('', 0)):
+#         if self.__weight - replace_thing.weight + new_thing.weight > self.max_weight:
+#             raise ValueError('превышен суммарный вес предметов')
+#
+#     def __check_idx(self, idx):
+#         if idx not in range(len(self.__things)):
+#             raise IndexError('неверный индекс')
+#
+#     def add_thing(self, thing):
+#         self.__check_weight(thing)
+#         self.__things.append(thing)
+#         self.__weight += thing.weight
+#
+#     def __getitem__(self, idx):
+#         self.__check_idx(idx)
+#         return self.__things[idx]
+#
+#     def __setitem__(self, idx, thing):
+#         self.__check_idx(idx)
+#         self.__check_weight(thing, self.__things[idx])
+#         self.__things[idx] = thing
+#         self.__weight += thing.weight
+#
+#     def __delitem__(self, idx):
+#         self.__check_idx(idx)
+#         thing = self.__things.pop(idx)
+#         self.__weight -= thing.weight
