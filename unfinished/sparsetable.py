@@ -1,3 +1,4 @@
+#3.8_11
 class Cell:
     def __init__(self, value):
         self.value = value
@@ -44,10 +45,11 @@ class SparseTable:
 
     def remove_data(self, row, col):
         """удаление ячейки (объект класса Cell) с индексами (row, col)"""
-        if self.data.get((row, col), None):
-            self.data.pop(row, col)
+        if self.data.get((row, col)):
+            del self.data[(row, col)]
         else:
-            raise ValueError('данные по указанным индексам отсутствуют')
+            raise IndexError('ячейка с указанными индексами не существует')
+
 
     def __coord_validator(self, row, col):
         if 0 <= row <= self.rows and 0 <= col <= self.cols:
@@ -59,7 +61,7 @@ class SparseTable:
             self.rows = max(self.data, key=lambda x: x[0])[0] + 1
             self.cols = max(self.data, key=lambda x: x[1])[1] + 1
 
-
+#Тесты
 st = SparseTable()
 st.add_data(2, 5, Cell(25))
 st.add_data(1, 1, Cell(11))
@@ -84,7 +86,7 @@ except ValueError:
     assert True
 else:
     assert False, "не сгенерировалось исключение ValueError"
-#
+
 try:
     st.remove_data(1, 1)
 except IndexError:
