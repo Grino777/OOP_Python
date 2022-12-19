@@ -1,3 +1,6 @@
+from operator import add, sub
+
+
 class Matrix:
     def __init__(self, *args):
         if len(args) == 1:
@@ -7,6 +10,14 @@ class Matrix:
             self.cols = args[1]
             self.fill_value = self.__check_fill_value(args[2])
             self.matrix = [[self.fill_value for _ in range(self.cols)] for _ in range(self.rows)]
+
+    def __add__(self, other):
+        res = self.__matrix_arithmetic(other, '+')
+        return res
+
+    def __sub__(self, other):
+        res = self.__matrix_arithmetic(other, '-')
+        return res
 
     def __getitem__(self, item):
         self.__check_index(*item)
@@ -19,8 +30,33 @@ class Matrix:
         r, c = key
         self.matrix[r][c] = value
 
+    def __matrix_arithmetic(self, other, sign):
+        a_dict = {'+': add,
+                  '-': sub}
+        if isinstance(other, Matrix):
+            self.__matrix_size_check(other)
+            res_matrix = [[0 for _ in range(len(self.matrix[i]))] for i in range(len(self.matrix))]
+            for row in range(len(self.matrix)):
+                for col in range(len(self.matrix[0])):
+                    res_matrix[row][col] = a_dict[sign](self.matrix[row][col], other.matrix[row][col])
+            return Matrix(res_matrix)
+        elif isinstance(other, (int, float)):
+            res_matrix = [[0 for _ in range(len(self.matrix[i]))] for i in range(len(self.matrix))]
+            for row in range(len(res_matrix)):
+                for col in range(len(res_matrix[row])):
+                    res_matrix[row][col] = a_dict[sign](self.matrix[row][col], other)
+            return Matrix(res_matrix)
+
+    def __matrix_size_check(self, other):
+        m1 = [len(self.matrix), 0]
+        m1[1] = max(list(map(lambda x: len(x), self.matrix)))
+        m2 = [len(other.matrix), 0]
+        m2[1] = max(list(map(lambda x: len(x), other.matrix)))
+        if not m1 == m2:
+            raise ValueError('операции возможны только с матрицами равных размеров')
+
     def __chek_value(self, value):
-        if not type(value) == int:
+        if not isinstance(value, (int, float)):
             raise TypeError('значения матрицы должны быть числами')
 
     def __check_index(self, x, y):
