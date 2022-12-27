@@ -9,7 +9,6 @@ class Layer:
                 i.next_layer = args[0]
         return self
 
-
 class Input(Layer):
     """Формирование входного слоя сети"""
     def __init__(self, inputs):
