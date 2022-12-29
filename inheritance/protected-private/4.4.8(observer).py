@@ -1,7 +1,6 @@
 class Observer:
     def update(self, data):
-        res = getattr(self, 'name')
-        setattr(self, res, data.__dict__[res])
+        pass
 
     def __hash__(self):
         return hash(id(self))
@@ -30,33 +29,33 @@ class Subject:
 
 class Data:
     def __init__(self, temp, press, wet):
-        self.temp = temp    # температура
+        self.temp = temp  # температура
         self.press = press  # давление
-        self.wet = wet      # влажность
+        self.wet = wet  # влажность
 
-class TemperatureView(Observer):
-    name = 'temp'
-    temp = None
 
-    def update(self, data):
-        super().update(data)
-        print(f'Текущая температура {self.temp}')
-
-class PressureView(Observer):
-    name = 'press'
-    press = None
+class View(Observer):
+    name = None
+    attr = None
 
     def update(self, data):
-        super().update(data)
-        print(f'Текущее давление {self.press}')
+        print(f'{self.name} {data.__dict__[self.attr]}')
 
-class WetView(Observer):
-    name = 'wet'
-    wet = None
 
-    def update(self, data):
-        super().update(data)
-        print(f'Текущая влажность {self.wet}')
+class TemperatureView(View):
+    name = "Текущая температура"
+    attr = 'temp'
+
+
+class PressureView(View):
+    name = 'Текущее давление'
+    attr = 'press'
+
+
+class WetView(View):
+    name = 'Текущая влажность'
+    attr = 'wet'
+
 
 subject = Subject()
 tv = TemperatureView()
@@ -66,8 +65,6 @@ wet = WetView()
 subject.add_observer(tv)
 subject.add_observer(pr)
 subject.add_observer(wet)
-
-
 
 subject.change_data(Data(23, 150, 83))
 # выведет строчки:
